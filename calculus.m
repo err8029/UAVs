@@ -22,19 +22,19 @@ h=foot2meters(5000);
 SLRangle=45;
 
 SLR=h/cos(SLRangle);
-Veq1=0.1;
-Veq2=0.2;
+Veq1=10;%in cm
+Veq2=20;
 
 Veq=[Veq1 Veq2];
-IFOV= Veq/jhonsons_criteria;
+FOV= Veq/jhonsons_criteria;
 
 Nlines=800;
 Area_image=Nlines^2/1000000;%in Mpixels
 
-%Part2
-Npixels=1066;%700 lines is 933 so we interpolate
+
+Npixels=lines2pixels(Nlines);%700 lines is 933 so we interpolate
 FOVatH=0.29;%typical FOV at 5000ft for our sensor
-IFOV2=deg2mrad(FOVatH)/Npixels;
+IFOV2=deg2mrad(FOV)/Npixels;
 R=IFOV2*jhonsons_criteria;
 
 %second part of the system the aircrafts that do SAR
