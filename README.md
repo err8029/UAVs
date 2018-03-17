@@ -1,5 +1,4 @@
 # UAVs
-Final project for UAVs subject
 
 **EO sensor prototyping program**
 
@@ -16,7 +15,7 @@ Final project for UAVs subject
 6.-Check input data
   - H: 5000 ft by default
   - Veq1: 10 cm by default
-  - Veq2: 30 cm by default
+  - Veq2: 20 cm by default
   
 5.-Click the start calculus buton
 
