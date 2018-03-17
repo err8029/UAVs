@@ -174,7 +174,7 @@ function f2(hco,eventStruct)
     prompt = {'Enter H in ft:','Enter lines of the sensor:','Enter Veq min in cm:','Enter Veq max in cm:'};
     title = 'Params';
     dims = [1 35];
-    definput = {'5000','800','10','20'};
+    definput = {num2str(h_foot),num2str(Nlines),num2str(Veq1),num2str(Veq2)};
     answer = inputdlg(prompt,title,dims,definput);
 
     h_foot=str2double(answer(1));
