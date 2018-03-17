@@ -10,7 +10,7 @@ if (isempty(hfig))
 	% crer el figure
 	hfig = figure;
 	set(hfig,'numbertitle','off');               % treu el numero de figura
-	set(hfig,'name',['DSCR -  Monitor']);
+	set(hfig,'name',['UAVs EO fast prototyping']);
 	set(hfig,'MenuBar','none');                  % treiem els menus i els icons
 	set(hfig,'doublebuffer','on');               % dos buffers de grafics
 	set(hfig,'CloseRequestFcn',@tancar)          % funci� que es cridar� al tancar la finestra
@@ -21,7 +21,7 @@ if (isempty(hfig))
 	refresh;
 	
     % afegim un men� b�sic per sortir
-	hmenu = uimenu('Label','&Monitor','Tag','M');
+	hmenu = uimenu('Label','&Input data','Tag','M');
 		uimenu(hmenu,'Label','Define jhonsons criteria','Callback',@funcio_test1,'tag','TEST');
 		uimenu(hmenu,'Label','Define params','Callback',@f2,'tag','test2');        
 		uimenu(hmenu,'Label','&exit','Callback',@tancar,'separator','on','Accelerator','E');
@@ -52,14 +52,14 @@ SLRangle_string = uicontrol('tag','Omax_string','Parent',hfig,'Style','Text','Un
     uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.585 0.39 0.15 0.04],'BackgroundColor','black');
 FOV_string = uicontrol('tag','FOV_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.591 0.4 0.14 0.02],'String','FOV=???');
 
-    uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.45 0.04 0.15 0.04],'BackgroundColor','black');
-R_string = uicontrol('tag','R_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.455 0.05 0.14 0.02],'String','R=???');
+    uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.72 0.22 0.15 0.04],'BackgroundColor','black');
+R_string = uicontrol('tag','R_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.725 0.23 0.14 0.02],'String','R=???');
 
     uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.595 0.73 0.15 0.04],'BackgroundColor','black');
 Omin_string = uicontrol('tag','Omin_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.6 0.74 0.14 0.02],'String','Omin=???');
 
 IFOV_string = uicontrol('tag','IFOV_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.8 0.85 0.175 0.02],'String','IFOV=???');
-Nlines_string = uicontrol('tag','Nlines_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.8 0.8 0.175 0.02],'String','Nlines=???');
+Nlines_string = uicontrol('tag','Nlines_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.8 0.8 0.175 0.02],'String','Res (min) =???');
 Npixels_string = uicontrol('tag','Npixels_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.8 0.75 0.175 0.02],'String','Npixels=???');
 Res_string = uicontrol('tag','Res_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.8 0.7 0.175 0.02],'String','Res=???');
 
@@ -68,7 +68,7 @@ uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Po
 uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.455 0.51 0.04 0.005],'BackgroundColor','black');
 uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.522 0.41 0.07 0.005],'BackgroundColor','black');
 uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.17 0.51 0.05 0.005],'BackgroundColor','black');
-uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.6 0.06 0.06 0.005],'BackgroundColor','black');
+uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.66 0.24 0.06 0.005],'BackgroundColor','black');
 uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.75 0.093 0.0025 0.02],'BackgroundColor','black');
 
     Jhonsons95=[3.6 3 4.8 6;
@@ -84,9 +84,8 @@ uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Po
     %    tank          (2)
     %    car           (3)
     %    person        (4)
-    jhonsons_criteria=Jhonsons95(3,3);
+    jhonsons_criteria=Jhonsons95(3,4);
     h_foot=5000;
-    Nlines=800;
     Veq1=10;%in cm
     Veq2=20;
     
@@ -118,17 +117,25 @@ function Payload_calculus(hco,eventStruct)
 
     Veq=[Veq1 Veq2];
     set(findobj('Tag','Veq_string'),'String',['Veq = (' num2str(Veq(1)) ' to ' num2str(Veq(2)) ') cm']);
-    Area= Veq/jhonsons_criteria;
+    theoretical_res= Veq/jhonsons_criteria;
     disp(jhonsons_criteria);
-    Npixels= sqrt(Area*10^6);
+    Npixels= sqrt(theoretical_res*10^6);
 
 
     
-    set(findobj('Tag','Nlines_string'),'String',['Nlines = ' num2str(Nlines) ' lines']);
+    set(findobj('Tag','Nlines_string'),'String',['Res (min) = ' num2str(theoretical_res(1)) ' and ' num2str(theoretical_res(2))  ' Mpx']);
     
-    prompt = {['the minimum resolution is: ' num2str(Npixels(1)) ' define a new one:'], 'Introduce the FOV for that resolution'};
-    title = 'Catalogue info';
-    dims = [1 35];
+    prompt = {[...
+    'Minimum requirements: ' ...
+    '-------------------------------------------------------' ... 
+    'Min resolution for Veq min: ' num2str(Npixels(1)) ' px                 ' ... 
+    'Min resolution for Veq max: ' num2str(Npixels(2)) ' px                 ' ... 
+    '-------------------------------------------------------' ...                                     ' ...
+    'Resolution of the selected camera ( > Min req ):'], ...
+    'FOV of the selected camera:'};...
+    
+    title = 'Select a commercial camera';
+    dims = [1 55];
     definput = {'',''};
     answer = inputdlg(prompt,title,dims,definput);
     
@@ -143,7 +150,12 @@ function Payload_calculus(hco,eventStruct)
     R=IFOV2*SLR/1000;
     set(findobj('Tag','R_string'),'String',['R = ' num2str(R)  ' mm']);
     Res=R*jhonsons_criteria/1000;
-    set(findobj('Tag','Res_string'),'String',['Res = ' num2str(Res) ' m']);
+    if Res*100>Veq2
+        set(findobj('Tag','Res_string'),'String',['Res = ' num2str(Res) ' m'],'ForegroundColor','red');
+    else
+        set(findobj('Tag','Res_string'),'String',['Res = ' num2str(Res) ' m']);
+    end
+    
     %second part of the system the aircrafts that do SARa
 
 end
@@ -180,17 +192,14 @@ switch ButtonName2
 end
 end
 function f2(hco,eventStruct)
-    prompt = {'Enter H in ft:','Enter lines of the sensor:','Enter Veq min in cm:','Enter Veq max in cm:'};
+    prompt = {'Enter H in ft:','Enter Veq min in cm:','Enter Veq max in cm:'};
     title = 'Params';
     dims = [1 35];
-    definput = {num2str(h_foot),num2str(Nlines),num2str(Veq1),num2str(Veq2)};
+    definput = {num2str(h_foot),num2str(Veq1),num2str(Veq2)};
     answer = inputdlg(prompt,title,dims,definput);
 
     h_foot=str2double(answer(1));
-    Nlines=str2double(answer(2));
-    Veq1=str2double(answer(3));
-    Veq2=str2double(answer(4));
-    
-    disp(answer)
+    Veq1=str2double(answer(2));
+    Veq2=str2double(answer(3));
 end
 end
