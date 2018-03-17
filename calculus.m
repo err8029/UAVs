@@ -37,4 +37,4 @@ FOVatH=0.29;%typical FOV at 5000ft for our sensor
 IFOV2=deg2mrad(FOV)/Npixels;
 R=IFOV2*jhonsons_criteria;
 
-%second part of the system the aircrafts that do SAR
+%second part of the system the aircrafts that do SARa
