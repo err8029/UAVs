@@ -84,7 +84,7 @@ uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Po
     %    tank          (2)
     %    car           (3)
     %    person        (4)
-    jhonsons_criteria=Jhonsons95(3,4);
+    jhonsons_criteria=Jhonsons95(3,3);
     h_foot=5000;
     Nlines=800;
     Veq1=10;%in cm
@@ -112,30 +112,38 @@ function Payload_calculus(hco,eventStruct)
     set(findobj('Tag','Omax_string'),'String',['Omax = ' num2str(SLRangle) ' deg']);
 
     
-    SLR=h/cos(SLRangle);
+    SLR=h/cos(((2*pi)/360)*SLRangle);
     set(findobj('Tag','SLR_string'),'String',['SLR = ' num2str(SLR) ' m']);
 
 
     Veq=[Veq1 Veq2];
     set(findobj('Tag','Veq_string'),'String',['Veq = (' num2str(Veq(1)) ' to ' num2str(Veq(2)) ') cm']);
-    FOV= Veq/jhonsons_criteria;
-    set(findobj('Tag','FOV_string'),'String',['FOV = (' num2str(FOV(1)) ' to ' num2str(FOV(2)) ') deg']);
-    set(findobj('Tag','Omin_string'),'String',['Omin = (' num2str(FOV(1)) ' to ' num2str(FOV(2)) ') deg']);
+    Area= Veq/jhonsons_criteria;
+    disp(jhonsons_criteria);
+    Npixels= sqrt(Area*10^6);
+
 
     
     set(findobj('Tag','Nlines_string'),'String',['Nlines = ' num2str(Nlines) ' lines']);
-    Area_image=Nlines^2/1000000;%in Mpixels
-
-
-    Npixels=lines2pixels(Nlines);%700 lines is 933 so we interpolate
+    
+    prompt = {['the minimum resolution is: ' num2str(Npixels(1)) ' define a new one:'], 'Introduce the FOV for that resolution'};
+    title = 'Catalogue info';
+    dims = [1 35];
+    definput = {'',''};
+    answer = inputdlg(prompt,title,dims,definput);
+    
+    Npixels=str2double(answer(1));
+    FOV=str2double(answer(2));
+    set(findobj('Tag','FOV_string'),'String',['FOV = ' num2str(FOV) ' deg']);
+    set(findobj('Tag','Omin_string'),'String',['Omin = ' num2str(FOV) ' deg']);
+    
     set(findobj('Tag','Npixels_string'),'String',['Npixels = ' num2str(Npixels) ' pixels']);
-    FOVatH=0.29;%typical FOV at 5000ft for our sensor
-    IFOV2=deg2mrad(FOV)/Npixels;
-    set(findobj('Tag','IFOV_string'),'String',['IFOV = (' num2str(IFOV2(1)) ' to ' num2str(IFOV2(2)) ') urad/pixel']);
+    IFOV2=deg2mrad(FOV)./Npixels;
+    set(findobj('Tag','IFOV_string'),'String',['IFOV = ' num2str(IFOV2) ' urad/pixel']);
     R=IFOV2*SLR/1000;
-    set(findobj('Tag','R_string'),'String',['R = (' num2str(R(1)) ' to ' num2str(R(2)) ') mm']);
+    set(findobj('Tag','R_string'),'String',['R = ' num2str(R)  ' mm']);
     Res=R*jhonsons_criteria/1000;
-    set(findobj('Tag','Res_string'),'String',['Res = (' num2str(Res(1)) ' to ' num2str(Res(2)) ') m']);
+    set(findobj('Tag','Res_string'),'String',['Res = ' num2str(Res) ' m']);
     %second part of the system the aircrafts that do SARa
 
 end
@@ -156,7 +164,7 @@ end
 ButtonName2 = questdlg('What kind of object?','Jhonsons criteria','Vehicle','Person','Person');
 switch ButtonName2
     case 'Vehicle'
-        ButtonName3 = questdlg('What kind of object?','Jhonsons criteria','Vehicle','Person');
+        ButtonName3 = questdlg('What kind of object?','Jhonsons criteria','Truck','Tank','Car','Car');
         switch ButtonName3
             case 'Truck'
                 cols=1;
@@ -167,7 +175,8 @@ switch ButtonName2
         end
     case 'Person'
         cols=4;
-    jhonsons_criteria=jhonsons95(rows,cols);
+    jhonsons_criteria=Jhonsons95(rows,cols);
+    disp(jhonsons_criteria)
 end
 end
 function f2(hco,eventStruct)

@@ -21,16 +21,14 @@ jhonsons_criteria=Jhonsons95(3,4);
 h=foot2meters(5000);
 SLRangle=45;
 
-SLR=h/cos(SLRangle);
+SLR=h/cos(((2*pi)/360)*SLRangle);
 Veq1=10;%in cm
 Veq2=20;
 
 Veq=[Veq1 Veq2];
 FOV= Veq/jhonsons_criteria;
 
-Nlines=800;
-Area_image=Nlines^2/1000000;%in Mpixels
-
+Npixels=sqrt(FOV*10^6)
 
 Npixels=lines2pixels(Nlines);%700 lines is 933 so we interpolate
 FOVatH=0.29;%typical FOV at 5000ft for our sensor

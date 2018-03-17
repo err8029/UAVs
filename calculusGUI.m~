@@ -37,23 +37,23 @@ play = uicontrol('Style', 'pushbutton', 'String', 'Start calculus','Units','Norm
     'Callback', @Payload_calculus);
 
 %texts
-    uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.145 0.49 0.07 0.04],'BackgroundColor','black');
-h_string=uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.15 0.5 0.06 0.02],'String','H=???');
+    uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.105 0.49 0.07 0.04],'BackgroundColor','black');
+h_string=uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.11 0.5 0.06 0.02],'String','H=???');
 
     uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.495 0.49 0.11 0.04],'BackgroundColor','black');
 SLR_string = uicontrol('tag','SLR_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.5 0.5 0.1 0.02],'String','SLR=???');
 
-    uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.705 0.06 0.11 0.04],'BackgroundColor','black');
-Veq_string = uicontrol('tag','Veq_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.71 0.07 0.1 0.02],'String','Veq=???');
+    uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.705 0.055 0.11 0.04],'BackgroundColor','black');
+Veq_string = uicontrol('tag','Veq_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.71 0.065 0.1 0.02],'String','Veq=???');
 
     uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.495 0.64 0.11 0.04],'BackgroundColor','black');
 SLRangle_string = uicontrol('tag','Omax_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.5 0.65 0.1 0.02],'String','Omax=???');
 
-    uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.505 0.39 0.15 0.04],'BackgroundColor','black');
-FOV_string = uicontrol('tag','FOV_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.61 0.4 0.14 0.02],'String','FOV=???');
+    uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.585 0.39 0.15 0.04],'BackgroundColor','black');
+FOV_string = uicontrol('tag','FOV_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.591 0.4 0.14 0.02],'String','FOV=???');
 
-    uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.51 0.01 0.15 0.04],'BackgroundColor','black');
-R_string = uicontrol('tag','R_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.515 0.02 0.14 0.02],'String','R=???');
+    uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.45 0.04 0.15 0.04],'BackgroundColor','black');
+R_string = uicontrol('tag','R_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.455 0.05 0.14 0.02],'String','R=???');
 
     uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.595 0.73 0.15 0.04],'BackgroundColor','black');
 Omin_string = uicontrol('tag','Omin_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.6 0.74 0.14 0.02],'String','Omin=???');
@@ -66,6 +66,10 @@ Res_string = uicontrol('tag','Res_string','Parent',hfig,'Style','Text','Units','
 uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.57 0.75 0.03 0.005],'BackgroundColor','black');
 uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.45 0.66 0.05 0.005],'BackgroundColor','black');
 uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.455 0.51 0.04 0.005],'BackgroundColor','black');
+uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.522 0.41 0.07 0.005],'BackgroundColor','black');
+uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.17 0.51 0.05 0.005],'BackgroundColor','black');
+uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.6 0.06 0.06 0.005],'BackgroundColor','black');
+uicontrol('tag','h_string','Parent',hfig,'Style','Text','Units','normalized','Position',[0.75 0.093 0.0025 0.02],'BackgroundColor','black');
 
     Jhonsons95=[3.6 3 4.8 6;
                 18 13.6 17.6 15.2;
@@ -108,25 +112,32 @@ function Payload_calculus(hco,eventStruct)
     set(findobj('Tag','Omax_string'),'String',['Omax = ' num2str(SLRangle) ' deg']);
 
     
-    SLR=h/cos(SLRangle);
+    SLR=h/cos(((2*pi)/360)*SLRangle);
     set(findobj('Tag','SLR_string'),'String',['SLR = ' num2str(SLR) ' m']);
 
 
     Veq=[Veq1 Veq2];
     set(findobj('Tag','Veq_string'),'String',['Veq = (' num2str(Veq(1)) ' to ' num2str(Veq(2)) ') cm']);
-    FOV= Veq/jhonsons_criteria;
-    set(findobj('Tag','FOV_string'),'String',['FOV = (' num2str(FOV(1)) ' to ' num2str(FOV(2)) ') deg']);
-    set(findobj('Tag','Omin_string'),'String',['Omin = (' num2str(FOV(1)) ' to ' num2str(FOV(2)) ') deg']);
+    Area= Veq/jhonsons_criteria;
+    Npixels= sqrt(Area*10^6);
+
 
     
     set(findobj('Tag','Nlines_string'),'String',['Nlines = ' num2str(Nlines) ' lines']);
-    Area_image=Nlines^2/1000000;%in Mpixels
-
-
-    Npixels=lines2pixels(Nlines);%700 lines is 933 so we interpolate
+    
+    prompt = {['the minimum resolution is: ' num2str(Npixels(1)) ' define a new one:'], 'Introduce the FOV for that resolution'};
+    title = 'Catalogue info';
+    dims = [1 35];
+    definput = {'',''};
+    answer = inputdlg(prompt,title,dims,definput);
+    
+    Npixels=str2double(answer(1));
+    FOV=str2double(answer(2));
+    set(findobj('Tag','FOV_string'),'String',['FOV = ' num2str(FOV) ' deg']);
+    set(findobj('Tag','Omin_string'),'String',['Omin = 'num2str(FOV) ' deg']);
+    
     set(findobj('Tag','Npixels_string'),'String',['Npixels = ' num2str(Npixels) ' pixels']);
-    FOVatH=0.29;%typical FOV at 5000ft for our sensor
-    IFOV2=deg2mrad(FOV)/Npixels;
+    IFOV2=deg2mrad(FOV)./Npixels;
     set(findobj('Tag','IFOV_string'),'String',['IFOV = (' num2str(IFOV2(1)) ' to ' num2str(IFOV2(2)) ') urad/pixel']);
     R=IFOV2*SLR/1000;
     set(findobj('Tag','R_string'),'String',['R = (' num2str(R(1)) ' to ' num2str(R(2)) ') mm']);
@@ -170,7 +181,7 @@ function f2(hco,eventStruct)
     prompt = {'Enter H in ft:','Enter lines of the sensor:','Enter Veq min in cm:','Enter Veq max in cm:'};
     title = 'Params';
     dims = [1 35];
-    definput = {'5000','800','10','20'};
+    definput = {num2str(h_foot),num2str(Nlines),num2str(Veq1),num2str(Veq2)};
     answer = inputdlg(prompt,title,dims,definput);
 
     h_foot=str2double(answer(1));
