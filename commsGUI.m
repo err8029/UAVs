@@ -1,10 +1,10 @@
-function mostrar_dades
+function commsGUI()
 
 
 
 
 % EVITAR cridar dos cops
-hfig = findobj('tag','MOSTRARDADES');
+hfig = findobj('tag','comms');
 if (isempty(hfig))
 
 	% crer el figure
@@ -14,7 +14,7 @@ if (isempty(hfig))
 	set(hfig,'MenuBar','none');                  % treiem els menus i els icons
 	set(hfig,'doublebuffer','on');               % dos buffers de grafics
 	set(hfig,'CloseRequestFcn',@tancar)          % funci� que es cridar� al tancar la finestra
-	set(hfig,'tag','MOSTRARDADES');              % identifiquem la figura
+	set(hfig,'tag','comms');              % identifiquem la figura
     set(hfig,'Units','Normalized','Position',[0.3,0.3,0.4,0.4]);
 
 	drawnow;

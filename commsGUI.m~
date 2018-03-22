@@ -1,4 +1,4 @@
-function mostrar_dades
+function mostrar_dade
 
 
 
@@ -43,12 +43,12 @@ if (isempty(hfig))
                 'position',[0.1,0.55,0.3,0.05],'string','resolution 1920x1080','BackgroundColor',[0.7 0.7 0.7]);
     
     uicontrol('style','text','units','normalized','BackgroundColor',[0.5 0.5 0.5],...
-                'position',[0.05,0.45,0.42,0.05],'string','  Video frequency','HorizontalAlignment','left');
+                'position',[0.05,0.45,0.42,0.05],'string','  Video frequency (Hz)','HorizontalAlignment','left');
     freq_in = uicontrol('tag','freq_in','style','edit','units','normalized',...
                 'position',[0.25,0.45,0.2,0.05]); 
     
     uicontrol('style','text','units','normalized','BackgroundColor',[0.5 0.5 0.5],...
-                'position',[0.05,0.35,0.42,0.05],'string','  Grey levels','HorizontalAlignment','left');
+                'position',[0.05,0.35,0.42,0.05],'string','  Grey levels (num)','HorizontalAlignment','left');
     grey_lvls = uicontrol('tag','grey_lvls','style','edit','units','normalized',...
                 'position',[0.25,0.35,0.2,0.05]); 
     uicontrol('tag','Bwithvid','style','text','units','normalized','BackgroundColor',[0.2 0.5 0.7],...
@@ -61,12 +61,12 @@ if (isempty(hfig))
                 'position',[0.52,0.25,0.42,0.6]);
             
     uicontrol('style','text','units','normalized','BackgroundColor',[0.5 0.5 0.5],...
-                'position',[0.52,0.45,0.42,0.05],'string','  Resolution picture','HorizontalAlignment','left');
+                'position',[0.52,0.45,0.42,0.05],'string','  Res picture (Mpx)','HorizontalAlignment','left');
     respic = uicontrol('tag','respic','style','edit','units','normalized',...
                 'position',[0.72,0.45,0.2,0.05]); 
             
     uicontrol('style','text','units','normalized','BackgroundColor',[0.5 0.5 0.5],...
-                'position',[0.52,0.35,0.42,0.05],'string','  Bits per pixel','HorizontalAlignment','left');
+                'position',[0.52,0.35,0.42,0.05],'string','  Bits per pixel (num)','HorizontalAlignment','left');
     bitspx = uicontrol('tag','bitspx','style','edit','units','normalized',...
                 'position',[0.72,0.35,0.2,0.05]);
     uicontrol('tag','Bwithpic','style','text','units','normalized','BackgroundColor',[0.2 0.5 0.7],...
@@ -106,7 +106,7 @@ function calc(hco,eventStruct)
     Grey_lvls=str2double(get(findobj('Tag','grey_lvls'), 'string'));
 
     consumption_vid_EO=(resolution_EO*Freq*Grey_lvls)/compresion_rate;
-    set(findobj('Tag','Bwithvid'),'String',['Bandwithnum2str(consumption_vid_EO));
+    set(findobj('Tag','Bwithvid'),'String',['Required bandwith: ' num2str(consumption_vid_EO) ' Mbps']);
 
     %EO photo capabilities
 
@@ -114,7 +114,7 @@ function calc(hco,eventStruct)
     bits_per_px=str2double(get(findobj('Tag','bitspx'), 'string'))
 
     consumption_pic_EO=(res*bits_per_px)/compresion_rate;
-    set(findobj('Tag','Bwithpic'),'String',num2str(consumption_pic_EO));
+    set(findobj('Tag','Bwithpic'),'String',['Required bandwith: ' num2str(consumption_pic_EO) ' Mbps']);
 end	
 function tancar(hco,eventStruct)
 
