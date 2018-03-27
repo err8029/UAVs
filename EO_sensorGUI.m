@@ -330,26 +330,42 @@ function commsSAR_GUI(hco,eventStruct)
                 'position',[0.2,0.85,0.5,0.05],'string','  SAR search area (km²/day)','HorizontalAlignment','left');
     SARsearchAreaUI = uicontrol('tag','SARsearchArea','style','edit','units','normalized',...
                 'position',[0.6,0.85,0.2,0.05]); %km²/day
+    uicontrol('style','text','units','normalized','BackgroundColor',[0.5 0.5 0.5],...
+                'position',[0.2,0.8,0.5,0.05],'string','  SAR resolution (m)','HorizontalAlignment','left');
+    SARres = uicontrol('tag','SARres','style','edit','units','normalized',...
+                'position',[0.6,0.8,0.2,0.05]); %m
             
     uicontrol('style','text','units','normalized','BackgroundColor',[0.5 0.5 0.5],...
-                'position',[0.2,0.75,0.5,0.05],'string','  Num of SAP images','HorizontalAlignment','left');
+                'position',[0.2,0.7,0.5,0.05],'string','  Num of SAP images','HorizontalAlignment','left');
     NofSAPimgUI = uicontrol('tag','NumSAPimg','style','edit','units','normalized',...
-                'position',[0.6,0.75,0.2,0.05]); %img/day
+                'position',[0.6,0.7,0.2,0.05]); %img/day
+    uicontrol('style','text','units','normalized','BackgroundColor',[0.5 0.5 0.5],...
+                'position',[0.2,0.65,0.5,0.05],'string','  SAP resolution (m)','HorizontalAlignment','left');
+    SAPres = uicontrol('tag','SAPres','style','edit','units','normalized',...
+                'position',[0.6,0.65,0.2,0.05]); %m
+    uicontrol('style','text','units','normalized','BackgroundColor',[0.5 0.5 0.5],...
+                'position',[0.2,0.6,0.5,0.05],'string','  Spot area (m²)','HorizontalAlignment','left');
+    GMTIarea = uicontrol('tag','SAParea','style','edit','units','normalized',...
+                'position',[0.6,0.6,0.2,0.05]); %m²
     
     uicontrol('style','text','units','normalized','BackgroundColor',[0.5 0.5 0.5],...
-                'position',[0.2,0.65,0.5,0.05],'string','  GMTI rate (km²/min)','HorizontalAlignment','left');
+                'position',[0.2,0.5,0.5,0.05],'string','  GMTI rate (km²/min)','HorizontalAlignment','left');
     GMTIrateUI = uicontrol('tag','GMTIrate','style','edit','units','normalized',...
-                'position',[0.6,0.65,0.2,0.05]);%Km²/min  
+                'position',[0.6,0.5,0.2,0.05]);%Km²/min
+    uicontrol('style','text','units','normalized','BackgroundColor',[0.5 0.5 0.5],...
+                'position',[0.2,0.45,0.5,0.05],'string','  GMTI resolution (m)','HorizontalAlignment','left');
+    GMTIres = uicontrol('tag','GMTIres','style','edit','units','normalized',...
+                'position',[0.6,0.45,0.2,0.05]); %m
     
     uicontrol('tag','SARbw','style','text','units','normalized','BackgroundColor',[0.2 0.5 0.7],...
-                'position',[0.25,0.45,0.5,0.05],'string','Bandwith needed for SAR: ?????','HorizontalAlignment','center'); 
+                'position',[0.25,0.35,0.5,0.05],'string','Bandwith needed for SAR: ?????','HorizontalAlignment','center'); 
     uicontrol('tag','SAPbw','style','text','units','normalized','BackgroundColor',[0.2 0.5 0.7],...
-                'position',[0.25,0.4,0.5,0.05],'string','Bandwith needed for SAP: ?????','HorizontalAlignment','center');
+                'position',[0.25,0.3,0.5,0.05],'string','Bandwith needed for SAP: ?????','HorizontalAlignment','center');
     uicontrol('tag','GMTIbw','style','text','units','normalized','BackgroundColor',[0.2 0.5 0.7],...
-                'position',[0.25,0.35,0.5,0.05],'string','Bandwith needed for GMTI: ?????','HorizontalAlignment','center'); 
+                'position',[0.25,0.25,0.5,0.05],'string','Bandwith needed for GMTI: ?????','HorizontalAlignment','center'); 
     
-    uicontrol('tag','bw','style','text','units','normalized','BackgroundColor',[0.2 0.5 0.7],...
-                'position',[0.25,0.25,0.5,0.05],'string','Total bandwith needed: ?????','HorizontalAlignment','center'); 
+    uicontrol('tag','bw','style','text','units','normalized','BackgroundColor',[0.4 0.5 0.8],...
+                'position',[0.25,0.2,0.5,0.05],'string','Total bandwith needed: ?????','HorizontalAlignment','center'); 
             
         play = uicontrol('Style', 'pushbutton', 'String', 'Calculate comms','Units','Normalized',...
     'Position', [0.35 0.1 0.3 0.04],...
@@ -366,7 +382,7 @@ function commsSAR_GUI(hco,eventStruct)
     %% SAR requirements bandwidth
 
     SARsearchArea = str2double(get(findobj('Tag','SARsearchArea'), 'string'));
-    resSAR = 1; %in m
+    resSAR = str2double(get(findobj('Tag','SARres'), 'string')); %in m
     resSAR_SQM = resSAR*resSAR;%in m² 
     SARbwNotComp = (((SARsearchArea*sqkm2sqm)/resSAR_SQM)*bitsPerPixel)/days2sec;
     SARbw = (SARbwNotComp / CompRate)/10^6;%in mbps;
@@ -375,9 +391,9 @@ function commsSAR_GUI(hco,eventStruct)
     %% SAP spot images bandwidth
 
     NofSAPimg = str2double(get(findobj('Tag','NumSAPimg'), 'string'));
-    resSAP = 0.3;%in m
+    resSAP = str2double(get(findobj('Tag','SAPres'), 'string'));%in m
     resSAP_SQM = resSAP*resSAP;%in m²
-    AreaSpot = 4; %in km²
+    AreaSpot =  str2double(get(findobj('Tag','SAParea'), 'string')); %in km²
     SAPbwNotComp = ((((NofSAPimg/days2sec)*AreaSpot)*sqkm2sqm)/resSAP_SQM)*bitsPerPixel;
     SAPbw = (SAPbwNotComp / CompRate)/10^6;%in mbps;
     set(findobj('Tag','SAPbw'),'String',['Bandwith needed for SAP: ' num2str(SAPbw) ' Mbps']);
@@ -385,7 +401,7 @@ function commsSAR_GUI(hco,eventStruct)
     %% GMTI radar capabilty bandwidth
 
     GMTIrate = str2double(get(findobj('Tag','GMTIrate'), 'string'));
-    resGMTI = 10;%in m
+    resGMTI = str2double(get(findobj('Tag','GMTIres'), 'string'));%in m
     resGMTI_SQM=resGMTI*resGMTI;%in m²
     GMTIbwNotComp = (((GMTIrate/min2sec)*sqkm2sqm)/resGMTI_SQM)*bitsPerPixel;
     GMTIbw = (GMTIbwNotComp / CompRate)/10^6;%in mbps
